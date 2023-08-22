@@ -31,7 +31,7 @@ class Reservation:
     def generate(self):
         """Generates the content for the reservation"""
         content = f"""
-        Hello {name} Thanks for your reservation!
+        Hello {self.customer_name} Thanks for your reservation!
         Here are your booking details:
         Name: {self.customer_name}
         Hotel ID: {self.hotel.hotel_id}
