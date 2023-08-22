@@ -1,7 +1,8 @@
 import pandas as pd
 
-df = pd.read_csv("hotels.csv")
+df = pd.read_csv("hotels.csv", dtype=str)
 df_cards = pd.read_csv("cards.csv", dtype=str).to_dict(orient="records")
+df_card_security = pd.read_csv("card_security.csv", dtype=str)
 
 
 class Hotel:
@@ -54,19 +55,33 @@ class CreditCard:
             return False
 
 
+class SecureCreditCard(CreditCard):
+
+    def authenticate(self, given_password):
+        password = df_card_security.loc[df_card_security["number"] == self.number, "password"].squeeze()
+        if password == given_password:
+            return True
+        else:
+            return False
+
+
 print(df)
-hotel_ID = int(input("Enter the ID of the hotel: "))
+hotel_ID = input("Enter the ID of the hotel: ")
 
 hotel = Hotel(hotel_ID)
 if hotel.available():
-    credit_card = CreditCard(number="1234")
+    credit_card = SecureCreditCard(number="1234")
     if credit_card.validate(expiry="12/26", holder="JOHN SMITH", cvc="123"):
-        hotel.book()
-        name = input("Enter your name: ")
-        reservation = Reservation(cust_name=name, hotel_object=hotel)
-        print(reservation.generate())
+        input_password = input("Enter your 2FA Password: ")
+        if credit_card.authenticate(given_password=input_password):
+            hotel.book()
+            name = input("Enter your name: ")
+            reservation = Reservation(cust_name=name, hotel_object=hotel)
+            print(reservation.generate())
+        else:
+            print("Additional Authentication Failed")
     else:
         print("There is a problem validating your card")
-        print(df_cards)
+
 else:
     print("Hotel is Full")
