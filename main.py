@@ -9,6 +9,7 @@ class Hotel:
     def __init__(self, hotel_id):
         self.hotel_id = hotel_ID
         self.hotel_name = df.loc[df["id"] == self.hotel_id, "name"].squeeze()
+        self.price = "£" + df.loc[df["id"] == self.hotel_id, "price"].squeeze()
 
     def book(self):
         """Books the hotel by changing its availability to no """
@@ -37,7 +38,7 @@ class Reservation:
         Name: {self.customer_name}
         Hotel ID: {self.hotel.hotel_id}
         Hotel Name: {self.hotel.hotel_name}
-
+        Price: {self.hotel.price}
 
         """
         return content
@@ -58,7 +59,8 @@ class CreditCard:
 class SecureCreditCard(CreditCard):
 
     def authenticate(self, given_password):
-        password = df_card_security.loc[df_card_security["number"] == self.number, "password"].squeeze()
+        password = df_card_security.loc[df_card_security["number"]
+                                        == self.number, "password"].squeeze()
         if password == given_password:
             return True
         else:
