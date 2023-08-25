@@ -6,7 +6,7 @@ df_card_security = pd.read_csv("card_security.csv", dtype=str)
 
 
 class Hotel:
-    def __init__(self, hotel_id):
+    def __init__(self, hotel_ID):
         self.hotel_id = hotel_ID
         self.hotel_name = df.loc[df["id"] == self.hotel_id, "name"].squeeze()
         self.price = "£" + df.loc[df["id"] == self.hotel_id, "price"].squeeze()
